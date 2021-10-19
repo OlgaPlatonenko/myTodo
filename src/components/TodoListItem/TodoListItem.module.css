@@ -1,0 +1,16 @@
+.todolistitem{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    }
+
+.todolistitemLabel{
+    margin-left: 1.25rem;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.btngroup{
+    display: flex;
+    align-items: flex-end;
+}

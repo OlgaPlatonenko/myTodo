@@ -1,0 +1,9 @@
+.todolist{
+    margin-top: 20px;
+    width: 60%;
+    display: block;     
+}
+
+.todolist button{
+    margin-right: 0.625rem;
+}
