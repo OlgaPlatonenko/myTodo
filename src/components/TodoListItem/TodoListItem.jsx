@@ -1,39 +1,36 @@
 import React from 'react';
-import { Component } from 'react';
 
-import styles from './TodoListItem.module.css';
+import './TodoListItem.css';
 
-export default class TodoListItem extends Component {
+export const TodoListItem = ({ label, important, done, onDone, onDelete, onImportant }) => {
+    let className = 'todolistitem';
 
-    handleClick = () => {
-        console.log(`Done: ${this.props.label}`);
-    };
+    if (done) {
+        className += ' done';
+    }
 
-    render() {
-        const { label, important = false } = this.props;
+    if (important) {
+        className += ' important';
+    }
 
-        const style = {
-            color: important ? 'steelblue' : 'black',
-            fontWeight: important && 'bold',
-        };
-
-        return (
-            <div className={styles.todolistitem}  >
-                <div
-                    style={style}
-                    className={styles.todolistitemLabel}
-                    onClick={this.handleClick}>
-                    {label}
-                </div>
-                <div className={styles.btngroup}>
-                    <button>
-                        <i className="fa fa-exclamation"></i>
-                    </button>
-                    <button>
-                        <i className="fa fa-trash-o"></i>
-                    </button>
-                </div>
+    return (
+        <div className={className} >
+            <div
+                className='todolistitemLabel'
+                onClick={onDone}>
+                {label}
             </div>
-        );
-    };
+            <div className='btngroup'>
+                <button onClick={onImportant}>
+                    <i className="fa fa-exclamation"></i>
+                </button>
+                <button onClick={onDelete}>
+                    <i className="fa fa-trash-o"></i>
+                </button>
+            </div>
+        </div>
+    );
+
 }
+
+export default TodoListItem;

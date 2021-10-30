@@ -1,0 +1,25 @@
+.todolistitem{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    }
+
+.todolistitem.done {
+    text-decoration: line-through;
+}    
+
+.todolistitem.important {
+    font-weight: bold;
+    color: steelblue;
+}  
+
+.todolistitemLabel{
+    margin-left: 1.25rem;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.btngroup{
+    display: flex;
+    align-items: flex-end;
+}
