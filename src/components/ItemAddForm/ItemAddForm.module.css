@@ -1,3 +1,9 @@
 .addform_container{
     margin-top: 25px;
+    display: flex;
+}
+
+.addform_container input{
+    margin-bottom: 10px;
+    margin-right: 10px;
 }

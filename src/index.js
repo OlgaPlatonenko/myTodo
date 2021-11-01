@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Header, TodoList, SearchPanel, ItemStatusFilter, ItemAddForm } from './components';
-
+import { Header, TodoList, SearchPanel, ItemStatusFilter } from './components';
+import ItemAddForm from './components/ItemAddForm/ItemAddForm';
 
 import styles from './index.module.css';
 
@@ -49,44 +49,35 @@ export default class App extends Component {
         };
         return newItem;
     };
-    findItemIndex(arr,id){
+    findItemIndex(arr, id) {
         let idx = arr.findIndex((el) => el.id === id);
         return idx;
     }
 
-   
-    onToggleDone = (id) => { 
+
+    onToggleDone = (id) => {
         this.setState(({ todoData }) => {
-            let idx = todoData.findIndex((el) => el.id === id);
-                       let oldObj = todoData[idx];
-            let newObj = {
-                ...oldObj,
-                done: !oldObj.done,
-            };           
-            let newArrDone = [
-                ...todoData.slice(0, idx),
-                newObj,
-                ...todoData.slice(idx + 1),
-            ];
-            return {
-                todoData: newArrDone
-            };          
+                     return {
+                todoData: this.toggleProperty(todoData, id, 'done'),
+            };
         });
     };
 
-    onToggleImportant = (id) => {
-        console.log(`important ${id}`);
-        this.setState(({todoData}) => {           
-            let oldObj = todoData[ this.findItemIndex(todoData,id)];
-            let newObj = {...oldObj, important: !oldObj.important};
-            let newArr = [
-                ...todoData.slice(0,this.findItemIndex(todoData,id)),
-                newObj,
-                ...todoData.slice(this.findItemIndex(todoData,id)+1),
-            ];
+    toggleProperty(arr, id, propName) {
+        let oldObj = arr[this.findItemIndex(arr, id)];
+        let newObj = { ...oldObj, [propName]: !oldObj[propName] };
+     return [
+            ...arr.slice(0, this.findItemIndex(arr, id)),
+            newObj,
+            ...arr.slice(this.findItemIndex(arr, id) + 1),
+        ];
 
-            return{
-                todoData: newArr
+    }
+
+    onToggleImportant = (id) => {
+        this.setState(({ todoData }) => {            
+            return {
+                todoData: this.toggleProperty(todoData, id, 'important'),
             };
 
         });
