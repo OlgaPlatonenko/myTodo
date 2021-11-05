@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Header, TodoList, SearchPanel, ItemStatusFilter } from './components';
+import { Header, TodoList, ItemStatusFilter } from './components';
 import ItemAddForm from './components/ItemAddForm/ItemAddForm';
+import SearchPanel from './components/SearchPanel/SearchPanel';
 
 import styles from './index.module.css';
 
@@ -13,7 +14,10 @@ export default class App extends Component {
         todoData: [
             this.createNewItem('item1'),
             this.createNewItem('item2'),
-        ]
+            this.createNewItem('fwaefv'),
+            this.createNewItem('mn nvf'),
+        ],
+        searchStr: '',
     };
 
     deleteItem = (id) => {
@@ -54,10 +58,9 @@ export default class App extends Component {
         return idx;
     }
 
-
     onToggleDone = (id) => {
         this.setState(({ todoData }) => {
-                     return {
+            return {
                 todoData: this.toggleProperty(todoData, id, 'done'),
             };
         });
@@ -66,7 +69,7 @@ export default class App extends Component {
     toggleProperty(arr, id, propName) {
         let oldObj = arr[this.findItemIndex(arr, id)];
         let newObj = { ...oldObj, [propName]: !oldObj[propName] };
-     return [
+        return [
             ...arr.slice(0, this.findItemIndex(arr, id)),
             newObj,
             ...arr.slice(this.findItemIndex(arr, id) + 1),
@@ -75,7 +78,7 @@ export default class App extends Component {
     }
 
     onToggleImportant = (id) => {
-        this.setState(({ todoData }) => {            
+        this.setState(({ todoData }) => {
             return {
                 todoData: this.toggleProperty(todoData, id, 'important'),
             };
@@ -83,16 +86,37 @@ export default class App extends Component {
         });
     };
 
+    search(items, str) {
+        if (str.length === 0) {
+            return items;
+        }
+        return items.filter((item) => {
+            return item.label.indexOf(str) > -1
+        });
+    }
+
+    onSearch = (str) => {
+        this.setState(() => {
+            return ({
+                searchStr: str,
+            });
+        });
+    }
+
     render() {
+        const { todoData, searchStr } = this.state;
+        const visible = this.search(todoData, searchStr);
         return (
             <div className={styles.container} >
                 < Header todos={this.state.todoData} />
                 <div className={styles.searchwrapper}>
-                    <SearchPanel />
+                    <SearchPanel
+                        onSearch={this.onSearch}
+                    />
                     <ItemStatusFilter />
                 </div>
                 <TodoList
-                    todos={this.state.todoData}
+                    todos={visible}
                     onDelete={this.deleteItem}
                     onDone={this.onToggleDone}
                     onImportant={this.onToggleImportant}
