@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Header, TodoList, ItemStatusFilter } from './components';
+import { Header, TodoList } from './components';
 import ItemAddForm from './components/ItemAddForm/ItemAddForm';
 import SearchPanel from './components/SearchPanel/SearchPanel';
+import ItemStatusFilter from './components/ItemStatusFilter/ItemStatusFilter';
 
 import styles from './index.module.css';
 
@@ -18,6 +19,7 @@ export default class App extends Component {
             this.createNewItem('mn nvf'),
         ],
         searchStr: '',
+        filter: 'all', //active, done, all
     };
 
     deleteItem = (id) => {
@@ -103,9 +105,31 @@ export default class App extends Component {
         });
     }
 
+    onFilter = (filter) => {
+        this.setState(() => {
+            return ({
+                filter: filter,
+            });
+        });
+    }
+
+    filterFunc = (items, filter ) => {
+        if (filter === 'all') {
+            return items;
+        }
+        if (filter === 'active') {
+            return items.filter((item) => !item.done);
+        }
+        if (filter === 'done') {
+            return items.filter((item) => item.done);
+        }
+    }
+
     render() {
-        const { todoData, searchStr } = this.state;
+        const { todoData, searchStr, filter} = this.state;
+      
         const visible = this.search(todoData, searchStr);
+        const filteredArr = this.filterFunc(visible, filter);
         return (
             <div className={styles.container} >
                 < Header todos={this.state.todoData} />
@@ -113,10 +137,13 @@ export default class App extends Component {
                     <SearchPanel
                         onSearch={this.onSearch}
                     />
-                    <ItemStatusFilter />
+                    <ItemStatusFilter
+                        myfilter={this.state.filter}
+                        onFilter={this.onFilter}
+                    />
                 </div>
                 <TodoList
-                    todos={visible}
+                    todos={filteredArr}
                     onDelete={this.deleteItem}
                     onDone={this.onToggleDone}
                     onImportant={this.onToggleImportant}
